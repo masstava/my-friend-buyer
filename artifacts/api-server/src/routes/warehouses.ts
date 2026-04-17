@@ -4,6 +4,7 @@ import { db, warehouses } from "@workspace/db";
 import {
   ListWarehousesResponse,
   CreateWarehouseBody,
+  GetWarehouseParams,
   UpdateWarehouseParams,
   UpdateWarehouseBody,
   DeleteWarehouseParams,
@@ -25,6 +26,20 @@ router.post("/warehouses", requireAuth, async (req, res): Promise<void> => {
   }
   const [row] = await db.insert(warehouses).values(parsed.data).returning();
   res.status(201).json(row);
+});
+
+router.get("/warehouses/:id", requireAuth, async (req, res): Promise<void> => {
+  const params = GetWarehouseParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const [row] = await db.select().from(warehouses).where(eq(warehouses.id, params.data.id));
+  if (!row) {
+    res.status(404).json({ error: "Magazzino non trovato" });
+    return;
+  }
+  res.json(row);
 });
 
 router.patch("/warehouses/:id", requireAuth, async (req, res): Promise<void> => {

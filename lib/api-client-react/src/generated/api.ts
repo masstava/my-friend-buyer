@@ -837,6 +837,84 @@ export const useCreateStore = <
   return useMutation(getCreateStoreMutationOptions(options));
 };
 
+export const getGetStoreUrl = (id: string) => {
+  return `/api/stores/${id}`;
+};
+
+export const getStore = async (
+  id: string,
+  options?: RequestInit,
+): Promise<Store> => {
+  return customFetch<Store>(getGetStoreUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetStoreQueryKey = (id: string) => {
+  return [`/api/stores/${id}`] as const;
+};
+
+export const getGetStoreQueryOptions = <
+  TData = Awaited<ReturnType<typeof getStore>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStore>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetStoreQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStore>>> = ({
+    signal,
+  }) => getStore(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getStore>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
+
+export type GetStoreQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getStore>>
+>;
+export type GetStoreQueryError = ErrorType<ErrorResponse>;
+
+export function useGetStore<
+  TData = Awaited<ReturnType<typeof getStore>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getStore>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetStoreQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
 export const getUpdateStoreUrl = (id: string) => {
   return `/api/stores/${id}`;
 };
@@ -1143,6 +1221,86 @@ export const useCreateWarehouse = <
 > => {
   return useMutation(getCreateWarehouseMutationOptions(options));
 };
+
+export const getGetWarehouseUrl = (id: string) => {
+  return `/api/warehouses/${id}`;
+};
+
+export const getWarehouse = async (
+  id: string,
+  options?: RequestInit,
+): Promise<Warehouse> => {
+  return customFetch<Warehouse>(getGetWarehouseUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetWarehouseQueryKey = (id: string) => {
+  return [`/api/warehouses/${id}`] as const;
+};
+
+export const getGetWarehouseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getWarehouse>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getWarehouse>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetWarehouseQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getWarehouse>>> = ({
+    signal,
+  }) => getWarehouse(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getWarehouse>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetWarehouseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getWarehouse>>
+>;
+export type GetWarehouseQueryError = ErrorType<ErrorResponse>;
+
+export function useGetWarehouse<
+  TData = Awaited<ReturnType<typeof getWarehouse>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getWarehouse>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetWarehouseQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 export const getUpdateWarehouseUrl = (id: string) => {
   return `/api/warehouses/${id}`;
@@ -1451,6 +1609,86 @@ export const useCreateSupplier = <
   return useMutation(getCreateSupplierMutationOptions(options));
 };
 
+export const getGetSupplierUrl = (id: string) => {
+  return `/api/suppliers/${id}`;
+};
+
+export const getSupplier = async (
+  id: string,
+  options?: RequestInit,
+): Promise<Supplier> => {
+  return customFetch<Supplier>(getGetSupplierUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetSupplierQueryKey = (id: string) => {
+  return [`/api/suppliers/${id}`] as const;
+};
+
+export const getGetSupplierQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSupplier>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getSupplier>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetSupplierQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSupplier>>> = ({
+    signal,
+  }) => getSupplier(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSupplier>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetSupplierQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSupplier>>
+>;
+export type GetSupplierQueryError = ErrorType<ErrorResponse>;
+
+export function useGetSupplier<
+  TData = Awaited<ReturnType<typeof getSupplier>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getSupplier>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSupplierQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
 export const getUpdateSupplierUrl = (id: string) => {
   return `/api/suppliers/${id}`;
 };
@@ -1747,6 +1985,74 @@ export const useCreateSku = <
 > => {
   return useMutation(getCreateSkuMutationOptions(options));
 };
+
+export const getGetSkuUrl = (id: string) => {
+  return `/api/skus/${id}`;
+};
+
+export const getSku = async (
+  id: string,
+  options?: RequestInit,
+): Promise<Sku> => {
+  return customFetch<Sku>(getGetSkuUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetSkuQueryKey = (id: string) => {
+  return [`/api/skus/${id}`] as const;
+};
+
+export const getGetSkuQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSku>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof getSku>>, TError, TData>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetSkuQueryKey(id);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSku>>> = ({
+    signal,
+  }) => getSku(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getSku>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
+
+export type GetSkuQueryResult = NonNullable<Awaited<ReturnType<typeof getSku>>>;
+export type GetSkuQueryError = ErrorType<ErrorResponse>;
+
+export function useGetSku<
+  TData = Awaited<ReturnType<typeof getSku>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  id: string,
+  options?: {
+    query?: UseQueryOptions<Awaited<ReturnType<typeof getSku>>, TError, TData>;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetSkuQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 export const getUpdateSkuUrl = (id: string) => {
   return `/api/skus/${id}`;

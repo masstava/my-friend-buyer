@@ -68,7 +68,9 @@ export default function Dashboard() {
   );
 }
 
-function KpiCard({ title, value, icon: Icon, loading }: { title: string, value?: number, icon: any, loading: boolean }) {
+import type { LucideIcon } from "lucide-react";
+
+function KpiCard({ title, value, icon: Icon, loading }: { title: string, value?: number, icon: LucideIcon, loading: boolean }) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

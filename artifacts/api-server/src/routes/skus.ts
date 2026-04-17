@@ -4,6 +4,7 @@ import { db, productSkus } from "@workspace/db";
 import {
   ListSkusResponse,
   CreateSkuBody,
+  GetSkuParams,
   UpdateSkuParams,
   UpdateSkuBody,
   DeleteSkuParams,
@@ -25,6 +26,20 @@ router.post("/skus", requireAuth, async (req, res): Promise<void> => {
   }
   const [row] = await db.insert(productSkus).values(parsed.data).returning();
   res.status(201).json(row);
+});
+
+router.get("/skus/:id", requireAuth, async (req, res): Promise<void> => {
+  const params = GetSkuParams.safeParse(req.params);
+  if (!params.success) {
+    res.status(400).json({ error: params.error.message });
+    return;
+  }
+  const [row] = await db.select().from(productSkus).where(eq(productSkus.id, params.data.id));
+  if (!row) {
+    res.status(404).json({ error: "Articolo non trovato" });
+    return;
+  }
+  res.json(row);
 });
 
 router.patch("/skus/:id", requireAuth, async (req, res): Promise<void> => {

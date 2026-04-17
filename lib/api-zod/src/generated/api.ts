@@ -96,6 +96,18 @@ export const CreateStoreBody = zod.object({
   companyId: zod.string().uuid(),
 });
 
+export const GetStoreParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+export const GetStoreResponse = zod.object({
+  id: zod.string().uuid(),
+  name: zod.string(),
+  companyId: zod.string().uuid(),
+  createdAt: zod.coerce.date(),
+  updatedAt: zod.coerce.date(),
+});
+
 export const UpdateStoreParams = zod.object({
   id: zod.coerce.string().uuid(),
 });
@@ -131,6 +143,18 @@ export const CreateWarehouseBody = zod.object({
   storeId: zod.string().uuid(),
 });
 
+export const GetWarehouseParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+export const GetWarehouseResponse = zod.object({
+  id: zod.string().uuid(),
+  name: zod.string(),
+  storeId: zod.string().uuid(),
+  createdAt: zod.coerce.date(),
+  updatedAt: zod.coerce.date(),
+});
+
 export const UpdateWarehouseParams = zod.object({
   id: zod.coerce.string().uuid(),
 });
@@ -162,6 +186,17 @@ export const ListSuppliersResponse = zod.array(ListSuppliersResponseItem);
 
 export const CreateSupplierBody = zod.object({
   name: zod.string(),
+});
+
+export const GetSupplierParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+export const GetSupplierResponse = zod.object({
+  id: zod.string().uuid(),
+  name: zod.string(),
+  createdAt: zod.coerce.date(),
+  updatedAt: zod.coerce.date(),
 });
 
 export const UpdateSupplierParams = zod.object({
@@ -199,6 +234,20 @@ export const CreateSkuBody = zod.object({
   brand: zod.string().nullish(),
   description: zod.string().nullish(),
   isSerialized: zod.boolean().optional(),
+});
+
+export const GetSkuParams = zod.object({
+  id: zod.coerce.string().uuid(),
+});
+
+export const GetSkuResponse = zod.object({
+  id: zod.string().uuid(),
+  code: zod.string(),
+  brand: zod.string().nullish(),
+  description: zod.string().nullish(),
+  isSerialized: zod.boolean(),
+  createdAt: zod.coerce.date(),
+  updatedAt: zod.coerce.date(),
 });
 
 export const UpdateSkuParams = zod.object({
