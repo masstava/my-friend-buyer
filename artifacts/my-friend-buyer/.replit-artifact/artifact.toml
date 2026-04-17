@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "My Friend Buyer"
+version = "1.0.0"
+id = "artifacts/my-friend-buyer"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19679
+
+[services.development]
+run = "pnpm --filter @workspace/my-friend-buyer run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/my-friend-buyer", "run", "build" ]
+publicDir = "artifacts/my-friend-buyer/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19679"
+BASE_PATH = "/"

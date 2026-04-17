@@ -1,36 +1,448 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: My Friend Buyer API - inventory management
 servers:
   - url: /api
-    description: Base API path
 tags:
   - name: health
-    description: Health operations
+  - name: me
+  - name: companies
+  - name: stores
+  - name: warehouses
+  - name: suppliers
+  - name: skus
+  - name: dashboard
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
-      summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
           content:
             application/json:
+              schema: { $ref: "#/components/schemas/HealthStatus" }
+
+  /me:
+    get:
+      operationId: getMe
+      tags: [me]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Me" }
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DashboardSummary" }
+
+  /dashboard/recent-activity:
+    get:
+      operationId: getDashboardRecentActivity
+      tags: [dashboard]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
               schema:
-                $ref: "#/components/schemas/HealthStatus"
+                type: array
+                items: { $ref: "#/components/schemas/ActivityItem" }
+
+  /companies:
+    get:
+      operationId: listCompanies
+      tags: [companies]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Company" } }
+    post:
+      operationId: createCompany
+      tags: [companies]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CompanyInput" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Company" }
+  /companies/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    get:
+      operationId: getCompany
+      tags: [companies]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Company" }
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorResponse" }
+    patch:
+      operationId: updateCompany
+      tags: [companies]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CompanyInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Company" }
+    delete:
+      operationId: deleteCompany
+      tags: [companies]
+      responses:
+        "204": { description: Deleted }
+
+  /stores:
+    get:
+      operationId: listStores
+      tags: [stores]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Store" } }
+    post:
+      operationId: createStore
+      tags: [stores]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StoreInput" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Store" }
+  /stores/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      operationId: updateStore
+      tags: [stores]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StoreInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Store" }
+    delete:
+      operationId: deleteStore
+      tags: [stores]
+      responses:
+        "204": { description: Deleted }
+
+  /warehouses:
+    get:
+      operationId: listWarehouses
+      tags: [warehouses]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Warehouse" } }
+    post:
+      operationId: createWarehouse
+      tags: [warehouses]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WarehouseInput" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Warehouse" }
+  /warehouses/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      operationId: updateWarehouse
+      tags: [warehouses]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/WarehouseInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Warehouse" }
+    delete:
+      operationId: deleteWarehouse
+      tags: [warehouses]
+      responses:
+        "204": { description: Deleted }
+
+  /suppliers:
+    get:
+      operationId: listSuppliers
+      tags: [suppliers]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Supplier" } }
+    post:
+      operationId: createSupplier
+      tags: [suppliers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SupplierInput" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Supplier" }
+  /suppliers/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      operationId: updateSupplier
+      tags: [suppliers]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SupplierInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Supplier" }
+    delete:
+      operationId: deleteSupplier
+      tags: [suppliers]
+      responses:
+        "204": { description: Deleted }
+
+  /skus:
+    get:
+      operationId: listSkus
+      tags: [skus]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { type: array, items: { $ref: "#/components/schemas/Sku" } }
+    post:
+      operationId: createSku
+      tags: [skus]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SkuInput" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Sku" }
+  /skus/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+    patch:
+      operationId: updateSku
+      tags: [skus]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SkuInput" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Sku" }
+    delete:
+      operationId: deleteSku
+      tags: [skus]
+      responses:
+        "204": { description: Deleted }
+
 components:
   schemas:
     HealthStatus:
       type: object
       properties:
-        status:
-          type: string
-      required:
-        - status
-
+        status: { type: string }
+      required: [status]
+    ErrorResponse:
+      type: object
+      properties:
+        error: { type: string }
+      required: [error]
+    Me:
+      type: object
+      properties:
+        id: { type: string }
+        email: { type: ["string", "null"] }
+        fullName: { type: ["string", "null"] }
+        roles: { type: array, items: { type: string } }
+        storeId: { type: ["string", "null"], format: uuid }
+        warehouseId: { type: ["string", "null"], format: uuid }
+      required: [id, roles]
+    DashboardSummary:
+      type: object
+      properties:
+        companies: { type: integer }
+        stores: { type: integer }
+        warehouses: { type: integer }
+        suppliers: { type: integer }
+        skus: { type: integer }
+        unitsInStock: { type: integer }
+      required: [companies, stores, warehouses, suppliers, skus, unitsInStock]
+    ActivityItem:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        movementType: { type: string }
+        skuCode: { type: ["string", "null"] }
+        quantity: { type: integer }
+        createdAt: { type: string, format: date-time }
+      required: [id, movementType, quantity, createdAt]
+    Company:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required: [id, name, createdAt, updatedAt]
+    CompanyInput:
+      type: object
+      properties:
+        name: { type: string }
+      required: [name]
+    Store:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        companyId: { type: string, format: uuid }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required: [id, name, companyId, createdAt, updatedAt]
+    StoreInput:
+      type: object
+      properties:
+        name: { type: string }
+        companyId: { type: string, format: uuid }
+      required: [name, companyId]
+    Warehouse:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        storeId: { type: string, format: uuid }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required: [id, name, storeId, createdAt, updatedAt]
+    WarehouseInput:
+      type: object
+      properties:
+        name: { type: string }
+        storeId: { type: string, format: uuid }
+      required: [name, storeId]
+    Supplier:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required: [id, name, createdAt, updatedAt]
+    SupplierInput:
+      type: object
+      properties:
+        name: { type: string }
+      required: [name]
+    Sku:
+      type: object
+      properties:
+        id: { type: string, format: uuid }
+        code: { type: string }
+        brand: { type: ["string", "null"] }
+        description: { type: ["string", "null"] }
+        isSerialized: { type: boolean }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+      required: [id, code, isSerialized, createdAt, updatedAt]
+    SkuInput:
+      type: object
+      properties:
+        code: { type: string }
+        brand: { type: ["string", "null"] }
+        description: { type: ["string", "null"] }
+        isSerialized: { type: boolean }
+      required: [code]
