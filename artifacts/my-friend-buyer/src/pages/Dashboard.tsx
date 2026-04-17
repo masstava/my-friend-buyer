@@ -42,7 +42,7 @@ export default function Dashboard() {
                 {activity.map((item) => (
                   <div key={item.id} className="flex items-center justify-between border-b pb-2 last:border-0 last:pb-0">
                     <div className="space-y-1">
-                      <p className="text-sm font-medium leading-none">{item.skuName || "Articolo sconosciuto"}</p>
+                      <p className="text-sm font-medium leading-none">{item.skuCode || "Articolo sconosciuto"}</p>
                       <p className="text-sm text-muted-foreground">
                         {format(new Date(item.createdAt), "dd MMM yyyy, HH:mm", { locale: it })}
                       </p>
