@@ -19,5 +19,7 @@ export * from "./store";
 export * from "./storeInput";
 export * from "./supplier";
 export * from "./supplierInput";
+export * from "./uploadUrlRequest";
+export * from "./uploadUrlResponse";
 export * from "./warehouse";
 export * from "./warehouseInput";

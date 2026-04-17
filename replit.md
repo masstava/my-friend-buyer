@@ -74,8 +74,7 @@ finance, readonly).
 - [x] Endpoint `/me` e `/dashboard/{summary,recent-activity}`
 - [x] Frontend: AppShell, Sidebar, Topbar, 9 pagine (italiano)
 - [x] CI GitHub Actions (typecheck a ogni push)
-- [ ] Object Storage server-side (template skill da copiare)
-  → vedi follow-up task
+- [x] Object Storage server-side (`/api/storage/uploads/request-url` + serving routes)
 - [ ] Collegamento repo `masstava/my-friend-buyer` (azione manuale dell'utente)
 
 ### Fase 2+ — Ancora da pianificare
